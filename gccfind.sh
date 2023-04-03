@@ -1,6 +1,7 @@
 #!/bin/bash
 #David Berkovits 318844685
 
+
 if [ $# -lt 2 ]
 then 
 	echo "Not enough parameters" 
@@ -9,18 +10,19 @@ fi ;
 
 path=$1
 word=$2
-ogpath="$(pwd)"
-cd $path
-if [ -n "$(find . -maxdepth 1 -name '*.out' -print -quit)" ]
+
+if [ -n "$(find $path -maxdepth 1 -name '*.out' -print -quit)" ]
 then
-	for file_to_delete in *.out; 
+	for file_to_delete in $path/*.out; 
 	do
 		rm "$file_to_delete" 
 	done
 fi
 
-if [ -n "$(find . -maxdepth 1 -name '*.c' -print -quit)" ];then
-	file_to_compile=$( grep -l "$word\s" *.c)
+
+if [ -n "$(find $path -maxdepth 1 -name '*.c' -print -quit)" ]
+then
+	file_to_compile=$(find $path -name "*.c" -exec grep -l "$word" {} \;)
 	for file in  $file_to_compile;
 	do
 		gcc -w -o ${file%.*}.out $file
@@ -29,16 +31,15 @@ fi
 
 if [ "$3" == "-r" ]
 then
-	if [ -d "*" ]
+	if [ -d "$path/*" ]
 	then 
 		exit
 	fi
-	for folder in */
+	for folder in $path/*/
 	do
-		newpath=$path/${folder%/}
-		nowpath="$(pwd)"
-		cd $ogpath
-		$($0 $newpath $word "-r") &
-		cd $nowpath
+		newpath=${folder%/}
+		$($0 $newpath $word -r) &
 	done
 fi
+
+
