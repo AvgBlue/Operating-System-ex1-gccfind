@@ -75,4 +75,5 @@ for folder in $path/*/
 		$0 $newpath $word -r &
 	done
 
+exit 0
 
