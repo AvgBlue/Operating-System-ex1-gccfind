@@ -1,5 +1,5 @@
 #!/bin/bash
-#David Berkovits 318844685
+#David Berkovits
 
 #check the number of parameters
 if [ $# -lt 2 ]
